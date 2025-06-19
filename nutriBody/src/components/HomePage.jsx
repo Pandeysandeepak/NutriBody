@@ -1,13 +1,15 @@
 import Grid from "@mui/material/Grid";
-import BlobsBackground from "../Atoms/BlobBackground";
-import { Button, CssBaseline, Typography, Box, Card } from "@mui/material";
-import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import { CssBaseline, Typography, Box, Card } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import SparklesIcon from '@mui/icons-material/AutoAwesome';
-import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
-import InsertChartIcon from '@mui/icons-material/InsertChart';
+import SparklesIcon from "@mui/icons-material/AutoAwesome";
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
+import InsertChartIcon from "@mui/icons-material/InsertChart";
+import ReusableButton from "../Atoms/ReusableButton";
+import ICONS from "../Atoms/Icons";
+import BlobWrapper from "../Atoms/BlobBackground";
 
 const ReusableCard = (props) => {
+  const IconComponent = ICONS[props.icon];
   return (
     <Card
       container
@@ -41,7 +43,7 @@ const ReusableCard = (props) => {
           alignItems: "center",
         }}
       >
-        <TrendingUpIcon sx={{ color: "white" }} />
+        {IconComponent && <IconComponent sx={{ color: "white" }} />}
       </Box>
 
       <Typography
@@ -74,6 +76,7 @@ const HomePage = () => {
       <CssBaseline />
       <Grid
         container
+        direction="column"
         sx={{
           width: "100vw",
           height: "100vh",
@@ -81,20 +84,7 @@ const HomePage = () => {
           overflow: "hidden",
         }}
       >
-        {/* Background Blobs */}
-        <Box
-          sx={{
-            position: "absolute",
-            width: "100%",
-            height: "100%",
-            top: 0,
-            left: 0,
-            zIndex: 0,
-          }}
-        >
-          <BlobsBackground />
-        </Box>
-
+        <BlobWrapper />
         {/* Main Content */}
         <Grid
           item
@@ -117,24 +107,18 @@ const HomePage = () => {
               p: 2,
             }}
           >
-            <Button
-              sx={{
-                background: "linear-gradient(to right, #059669, #0284c7)",
-                color: "white",
-                textTransform: "none",
-                transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                "&:hover": {
-                  transform: "translateY(-2px)",
-                  boxShadow: "0 12px 36px rgba(5, 150, 105, 0.4)",
-                },
-                width: "8rem",
-                height: "2.85rem",
-                borderRadius: "0.5rem",
-                fontSize: "1.1rem",
-              }}
-            >
-              Log in
-            </Button>
+            <ReusableButton
+              background="linear-gradient(to right, #059669, #0284c7)"
+              textColor="white"
+              transition="transform 0.3s ease, box-shadow 0.3s ease"
+              transform="translateY(-2px)"
+              boxShadow="0 12px 36px rgba(5, 150, 105, 0.4)"
+              width="8rem"
+              height="2.85rem"
+              borderRadius="0.5rem"
+              fontSize="1.1rem"
+              buttonText="Log in"
+            />
           </Box>
 
           {/* Centered Typography */}
@@ -186,74 +170,78 @@ const HomePage = () => {
               }}
             >
               <ReusableCard
-                color={"#10B981"}
-                heading={"Weight Maintainance "}
-                body={
-                  "Healthy muscle building and weight gain with nutrient-dense meals"
-                }
+                icon="TrendingUpIcon"
+                color="#10B981"
+                heading="Weight Maintenance"
+                body="Healthy muscle building and weight gain with nutrient-dense meals"
               />
+
               <ReusableCard
-                color={"#0284C7"}
-                heading={"Weight Loss "}
-                body={
-                  "Balanced nutrition to maintain your ideal weight and energy levels"
-                }
+                icon="FitnessCenterIcon"
+                color="#0284C7"
+                heading="Weight Loss"
+                body="Balanced nutrition to maintain your ideal weight and energy levels"
               />
+
               <ReusableCard
-                color={"#F97316"}
-                heading={"Weight Gain "}
-                body={
-                  "Sustainable fat loss with satisfying, nutrition-packed meals"
-                }
+                icon="FastfoodIcon"
+                color="#F97316"
+                heading="Weight Gain"
+                body="Sustainable fat loss with satisfying, nutrition-packed meals"
               />
             </Grid>
             <Grid sx={{ width: "100%", height: "4rem", my: "1.5rem" }}>
-              <Button
-                sx={{
-                  width: "20rem",
-                  height: "4rem",
-                  background: "linear-gradient(to right, #059669, #0284c7)",
-                  borderRadius: "5rem",
-                  color: "white",
-                  fontSize: "1rem",
-                  textTransform: "none",
-                  transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                  "&:hover": {
-                    transform: "translateX(1px)",
-                    boxShadow: "0 12px 36px rgba(5, 150, 105, 0.4)",
-                  },
-                }}
-              >
-                Start Your journey
-                <ArrowForwardIcon sx={{ color: "white", mx: "0.5rem" }} />
-              </Button>
+              <ReusableButton
+                width="20rem"
+                height="4rem"
+                background="linear-gradient(to right, #059669, #0284c7)"
+                borderRadius="5rem"
+                textColor="white"
+                fontSize="1rem"
+                textTransform="none"
+                transition="transform 0.3s ease, box-shadow 0.3s ease"
+                transform="translateX(1px)"
+                boxShadow="0 12px 36px rgba(5, 150, 105, 0.4)"
+                buttonText="Start Your journey"
+              />
 
-              <Grid sx={{my:"2.5rem"}}>
+              <ArrowForwardIcon sx={{ color: "white", mx: "0.5rem" }} />
+
+              <Grid sx={{ my: "2.5rem" }}>
                 <Typography
-                sx={{
-                  textAlign: "center",
-                  color: "gray",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  gap: 1,
-                  flexWrap: "wrap",
-                }}
-              >
-                <SparklesIcon fontSize="small" sx={{ color: "#f59e0b" }} /> Affordable ingredients •
-                <ReceiptLongIcon fontSize="small" sx={{ color: "#6366f1" }} /> Kitchen-friendly recipes •
-                <InsertChartIcon fontSize="small" sx={{ color: "#10b981" }} /> Personalized plans
-              </Typography>
-              <Typography
-                sx={{
-                  textAlign: "center",
-                  color: "gray",
-                  fontSize: "0.9rem",
-                  mt: 1,
-                }}
-              >
-                Join thousands who've transformed their health with NutriPlan
-              </Typography>
+                  sx={{
+                    textAlign: "center",
+                    color: "gray",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: 1,
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <SparklesIcon fontSize="small" sx={{ color: "#f59e0b" }} />{" "}
+                  Affordable ingredients •
+                  <ReceiptLongIcon
+                    fontSize="small"
+                    sx={{ color: "#6366f1" }}
+                  />{" "}
+                  Kitchen-friendly recipes •
+                  <InsertChartIcon
+                    fontSize="small"
+                    sx={{ color: "#10b981" }}
+                  />{" "}
+                  Personalized plans
+                </Typography>
+                <Typography
+                  sx={{
+                    textAlign: "center",
+                    color: "gray",
+                    fontSize: "0.9rem",
+                    mt: 1,
+                  }}
+                >
+                  Join thousands who've transformed their health with NutriPlan
+                </Typography>
               </Grid>
             </Grid>
           </Box>
