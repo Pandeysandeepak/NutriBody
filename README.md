@@ -1,2 +1,2 @@
 # TheBalancedBeing
-The is the personal project deals with the diet and healthcare 
+Thei project deals with the diet and healthcare 
