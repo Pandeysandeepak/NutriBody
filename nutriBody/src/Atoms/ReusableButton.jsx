@@ -13,15 +13,24 @@ const ReusableButton = (props) => {
         textTransform: "none",
         transition: props.transition,
         fontWeight: props.fontWeight,
+        my: props.my,
         "&:hover": {
           transform: props.transform,
           boxShadow: props.boxShadow,
         },
+        "&.Mui-disabled": {
+          opacity: 0.5, 
+          background: props.background, 
+          color: props.textColor, 
+          cursor: "not-allowed", 
+        },
       }}
+      onClick={props.onClick}
+      disabled={props.disabled}
     >
       {props.buttonText}
     </Button>
   );
 };
 
-export default ReusableButton
+export default ReusableButton;

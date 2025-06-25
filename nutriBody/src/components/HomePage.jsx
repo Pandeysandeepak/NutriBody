@@ -5,8 +5,10 @@ import SparklesIcon from "@mui/icons-material/AutoAwesome";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import InsertChartIcon from "@mui/icons-material/InsertChart";
 import ReusableButton from "../Atoms/ReusableButton";
-import ICONS from "../Atoms/Icons";
+import ICONS from "./Icons";
 import BlobWrapper from "../Atoms/BlobBackground";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ReusableCard = (props) => {
   const IconComponent = ICONS[props.icon];
@@ -70,6 +72,27 @@ const ReusableCard = (props) => {
 
 const HomePage = () => {
   const content = ["Weight Gain ", "Weight Maintenance", "Weight Loss"];
+  const url = "http://localhost:8080/users/hello";
+  const navigate = useNavigate();
+  const handleLoginOnclick = () => {
+    navigate("/signUp");
+  };
+
+  useEffect(() => {
+    async function fetchData(url) {
+      try {
+        const response = await fetch(url);
+
+        // JSON parse
+
+        const data = await response.text();
+        console.log("Data received:", data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+    fetchData(url);
+  }, []);
 
   return (
     <>
@@ -118,6 +141,7 @@ const HomePage = () => {
               borderRadius="0.5rem"
               fontSize="1.1rem"
               buttonText="Log in"
+              onClick={handleLoginOnclick}
             />
           </Box>
 
