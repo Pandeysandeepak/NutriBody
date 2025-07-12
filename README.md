@@ -1,28 +1,31 @@
 # TheBalancedBeing
 
-A personalized AI-powered diet planning web application built with **Spring Boot**. It helps users generate optimized meal plans based on individual preferences, dietary restrictions, and fitness goals.
+**TheBalancedBeing** is a personalized diet planning web application powered by **Spring Boot** and **Gemini AI (Google's Generative AI)**. It helps users generate optimized meal plans tailored to their dietary preferences, fitness goals, and nutritional needs.
 
 ## 🧠 Features
 
-- 🔐 User authentication and role-based access
-- 📊 Profile management with city, state, experience, and more
-- 🧮 AI-based personalized diet recommendations
-- 🗄️ MySQL database integration with JPA
-- 🌐 RESTful API backend for scalable deployment
+- 🔐 Secure user registration and login with JWT authentication
+- 📄 Profile management (username, gender, city, state, experience, etc.)
+- 🧠 AI-powered diet plan generation using Gemini
+- 📊 Dynamic diet type and calorie selection
+- 🗄️ MySQL database integration using JPA
+- 🌐 RESTful APIs for frontend consumption
 
 ## 🛠️ Technologies Used
 
 - Java 17
 - Spring Boot
+- Spring Security & JWT
 - Spring Data JPA
 - MySQL
-- JWT (JSON Web Tokens)
-- OpenAI / AI service integration (optional)
+- Gemini (Google AI)
 - Maven
 
 ## 🚀 Getting Started
 
-### Clone the repository
+### 1. Clone the repository
+
 ```bash
 git clone https://github.com/Pandeysandeepak/TheBalancedBeing.git
 cd TheBalancedBeing
+
