@@ -1,5 +1,5 @@
 import Grid from "@mui/material/Grid";
-import { CssBaseline, Typography, Box, Card } from "@mui/material";
+import { CssBaseline, Typography, Box, Card, Modal, Stack, useTheme } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import SparklesIcon from "@mui/icons-material/AutoAwesome";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
@@ -7,8 +7,9 @@ import InsertChartIcon from "@mui/icons-material/InsertChart";
 import ReusableButton from "../Atoms/ReusableButton";
 import ICONS from "./Icons";
 import BlobWrapper from "../Atoms/BlobBackground";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { SIGNIN_URL, SIGNUP_URL } from "./constants";
 
 const ReusableCard = (props) => {
   const IconComponent = ICONS[props.icon];
@@ -70,29 +71,87 @@ const ReusableCard = (props) => {
   );
 };
 
+const UserTypeModal = ({ open, handleClose }) => {
+  const theme = useTheme()
+  const [userType, setUserType] = useState("")
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (userType) {
+      localStorage.setItem("userType", userType)
+      navigate(SIGNIN_URL)
+    }
+  }, [userType])
+
+  return (
+    <Modal
+      open={open}
+      onClose={handleClose}
+      sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+    >
+      <Box sx={{
+        backgroundColor: 'white',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: 'black',
+        borderRadius: '0.5rem',
+        flexDirection: 'column',
+        gap: '1rem',
+        p: '1rem',
+        border: '2px solid' + theme.palette.inputBorderYellow
+      }}>
+        <Typography sx={{ fontSize: '1.5rem', fontWeight: 600 }}>
+          Sign up as :
+        </Typography>
+
+        <Stack sx={{ display: 'flex', flexDirection: 'row', gap: '5rem' }}>
+          <ReusableButton
+            background={theme.palette.borderGreen}
+            textColor={theme.palette.white}
+            boxShadow="0 12px 36px rgba(5, 150, 105, 0.4)"
+            width="8rem"
+            height="2.85rem"
+            borderRadius="0.5rem"
+            fontSize="1.1rem"
+            buttonText="Nutritionist"
+            fontWeight={600}
+            my="1rem"
+            onClick={() => {
+              setUserType('admin')
+            }}
+          />
+          <ReusableButton
+            background={theme.palette.borderGreen}
+            textColor={theme.palette.white}
+            boxShadow="0 12px 36px rgba(5, 150, 105, 0.4)"
+            width="5rem"
+            height="2.85rem"
+            borderRadius="0.5rem"
+            fontSize="1.1rem"
+            buttonText="User"
+            fontWeight={600}
+            my="1rem"
+            onClick={() => {
+              setUserType('user')
+            }}
+          />
+        </Stack>
+      </Box>
+    </Modal>
+  );
+};
+
 const HomePage = () => {
   const content = ["Weight Gain ", "Weight Maintenance", "Weight Loss"];
   const url = "http://localhost:8080/users/hello";
   const navigate = useNavigate();
-  const handleLoginOnclick = () => {
-    navigate("/signUp");
+  const [openModal, setOpenModal] = useState(false)
+
+  const handleSignupclick = () => {
+    setOpenModal(true)
   };
 
-  useEffect(() => {
-    async function fetchData(url) {
-      try {
-        const response = await fetch(url);
-
-        // JSON parse
-
-        const data = await response.text();
-        console.log("Data received:", data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    }
-    fetchData(url);
-  }, []);
 
   return (
     <>
@@ -140,8 +199,8 @@ const HomePage = () => {
               height="2.85rem"
               borderRadius="0.5rem"
               fontSize="1.1rem"
-              buttonText="Log in"
-              onClick={handleLoginOnclick}
+              buttonText="Sign up"
+              onClick={handleSignupclick}
             />
           </Box>
 
@@ -271,6 +330,7 @@ const HomePage = () => {
           </Box>
         </Grid>
       </Grid>
+      {openModal && <UserTypeModal open={openModal} />}
     </>
   );
 };

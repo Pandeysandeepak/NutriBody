@@ -18,7 +18,7 @@ const ReusableTextField = (props) => {
       direction="column"
       xs={12}
       sx={{
-        width: "30rem",
+        width:  props.containerWidth || "30rem",
         backgroundColor: "transparent",
         height: "4.5rem",
       }}

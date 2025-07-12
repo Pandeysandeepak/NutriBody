@@ -15,11 +15,13 @@ import {
   passwordValidation,
   confirmPasswordValidation,
 } from "./validation";
-import { CREATE_USER_URL, LOG_IN_URL } from "./constants";
+import { ADMIN_PROFILE, CREATE_USER_URL, LOG_IN_URL, USER_PROFILE } from "./constants";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const SignInComponent = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
   const [error, setError] = useState({
     emailError: "",
     passwordError: "",
@@ -29,18 +31,38 @@ const SignInComponent = () => {
     password: "",
   });
   const [loginData, setLoginData] = useState(initialLoginData);
+  const [userType, setUserType] = useState("");
+
+  useEffect(() => {
+    const userTypeData = localStorage.getItem("userType");
+    setUserType(userTypeData);
+  }, []);
 
   const handleLoginClick = async () => {
     const data = {
       email: loginData.email,
       password: loginData.password,
+      role: [userType],
     };
     try {
-      axios.post(LOG_IN_URL, data);
-      alert("Login Successful ");
+      const response = await axios.post(LOG_IN_URL, data);
+      alert("Login Successful");
+
+      if (response?.data?.token) {
+        localStorage.setItem("token", response?.data?.token);
+        localStorage.setItem("email", response?.data?.email);
+
+        const rolesString = response.data.roles;
+        const rolesArray = rolesString.replace(/[\[\]\s]/g, "").split(",");
+        if (rolesArray[0] === "admin") {
+          navigate(ADMIN_PROFILE);
+        }else{
+          navigate(USER_PROFILE);
+        }
+      }
     } catch (error) {
-      alert("Failed");
-      console.log("error", error);
+      alert("Login Failed");
+      console.log("Error", error);
     }
   };
 
@@ -169,6 +191,7 @@ const SignUpComponent = () => {
     confirmPassword: "",
   });
   const [details, setDetails] = useState(initialDetailsState);
+  const [userType, setUserType] = useState("");
   const [error, setError] = useState({
     nameError: "",
     usernameError: "",
@@ -184,6 +207,7 @@ const SignUpComponent = () => {
       username: details.username,
       email: details.email,
       password: details.password,
+      roles: [userType],
     };
     try {
       const response = await axios.post(CREATE_USER_URL, data);
@@ -204,6 +228,11 @@ const SignUpComponent = () => {
     }
   }, [error]);
 
+  useEffect(() => {
+    const userTypeData = localStorage.getItem("userType");
+    setUserType(userTypeData);
+  }, []);
+
   return (
     <Box
       sx={{
@@ -214,7 +243,6 @@ const SignUpComponent = () => {
         my: "1rem",
         flexDirection: "column",
         gap: "0.5rem",
-        // my: "2rem",
       }}
     >
       <ReusableTextField
@@ -354,7 +382,7 @@ const SignUpComponent = () => {
 };
 const SignUpPage = () => {
   const theme = useTheme();
-  const [buttonText, setButtonText] = useState("Sign Up");
+  const [buttonText, setButtonText] = useState("Sign in");
 
   const handleSignInOptionClick = () => {
     buttonText === "Sign in"

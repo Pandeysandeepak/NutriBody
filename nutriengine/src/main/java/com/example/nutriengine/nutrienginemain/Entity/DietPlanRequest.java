@@ -11,8 +11,6 @@ public class UserProfile {
     private String userId;
     private String userName;
     private String email;
-    private String password;
-    private String hashedPassword;
     private String gender;
     private int age;
     private int height;
@@ -21,4 +19,5 @@ public class UserProfile {
     private String goal;
     private String dietaryPreference;
     private String mealFrequency;
+    private String role;
 }

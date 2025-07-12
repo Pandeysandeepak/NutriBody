@@ -13,6 +13,8 @@ const ReusableButton = (props) => {
         textTransform: "none",
         transition: props.transition,
         fontWeight: props.fontWeight,
+        border: props.border,
+        boxShadow: props.boxShadow,
         my: props.my,
         "&:hover": {
           transform: props.transform,
