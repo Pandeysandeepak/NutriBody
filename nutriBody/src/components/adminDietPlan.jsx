@@ -40,6 +40,7 @@ const AdminDietPlan = () => {
   const [email, setEmail] = useState("");
   const [gender, setGender] = useState("");
   const [response, setResponse] = useState(null);
+  const [role , setRole] = useState(null)
 
   const handleDataChange = (key, value) => {
     setData((prevData) => ({
@@ -52,9 +53,11 @@ const AdminDietPlan = () => {
     const token = localStorage.getItem("token");
     const email = localStorage.getItem("email");
     const gender = localStorage.getItem("gender");
+    const role = localStorage.getItem("userType");
     setToken(token);
     setEmail(email);
     setGender(gender);
+    setRole(role);
   }, []);
 
   const handleProceedClick = async () => {
@@ -70,6 +73,7 @@ const AdminDietPlan = () => {
       mealFrequency: data.mealFrequency,
       email: email,
       gender: gender,
+      role: role
     };
 
     try {
@@ -114,7 +118,7 @@ const AdminDietPlan = () => {
         ) : (
           <Grid
             item
-            sx={{ display: "flex", flexDirection: "column", width: "80%" }}
+            sx={{ display: "flex", flexDirection: "column", width: "86%" , maxHeight:"100vh", overflow:"scroll", mx: "-1rem" }}
           >
             <Typography
               sx={{
@@ -122,6 +126,7 @@ const AdminDietPlan = () => {
                 fontWeight: 800,
                 my: "0.5rem",
                 color: "green",
+                px:"1rem"
               }}
             >
               Get Diet Plan

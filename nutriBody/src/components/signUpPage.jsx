@@ -242,7 +242,7 @@ const SignUpComponent = () => {
         alignItems: "center",
         my: "1rem",
         flexDirection: "column",
-        gap: "0.5rem",
+        gap: "0.3rem",
       }}
     >
       <ReusableTextField
@@ -349,7 +349,7 @@ const SignUpComponent = () => {
           width: "50%",
           backgroundColor: "transparent",
           height: "2.5rem",
-          my: "1.5rem",
+          my: "1rem",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -420,7 +420,7 @@ const SignUpPage = () => {
             container
             sx={{
               width: "70rem",
-              height: "40rem",
+              height: "35rem",
               border: "0.3rem solid" + theme.palette.borderGreen,
               borderRadius: "0.5rem",
             }}

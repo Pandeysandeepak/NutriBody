@@ -4,7 +4,11 @@ import ReusableButton from "../../Atoms/ReusableButton";
 import DashboardMenubar from "../../Atoms/dashboardMenubar";
 import defaultProfile from "../../Assets/defaultProfile.png";
 import { useState, useRef, useEffect } from "react";
-import { ADMIN_SAVE_PROFILE, UPLOAD_PROFILE_PICTURE_URL } from "../constants";
+import {
+  ADMIN_SAVE_PROFILE,
+  UPLOAD_PROFILE_PICTURE_URL,
+  GET_PROFILE_PICTURE_URL,
+} from "../constants";
 import axios, { Axios } from "axios";
 import ReusableField from "../../Atoms/ReusableField";
 import { data } from "autoprefixer";
@@ -35,11 +39,32 @@ const AdminProfile = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     const email = localStorage.getItem("email");
-    console.log("Token from local storage", token);
-
     setToken(token);
     setEmail(email);
+    if(token && email){
+      getProfilePicture(token,email)
+    }
   }, []);
+
+  const getProfilePicture = async (token, email) => {
+    const data = {
+      email: email
+    }
+    try {
+      const response = await axios.get(`${GET_PROFILE_PICTURE_URL}?email=${email}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response) {
+        setProfilePic(response?.data?.url);
+      }
+
+    } catch (error) {
+      console.log("Profile picture not found", error.message);
+    }
+  };
 
   const handleProfileCilck = () => {
     fileInputRef.current.click();
@@ -125,13 +150,13 @@ const AdminProfile = () => {
   return (
     <>
       <CssBaseline />
-      <Grid container sx={{ height: "100vh", gap: "-1rem" }}>
+      <Grid container>
         <Grid item sx={{ width: "15%" }}>
           <DashboardMenubar />
         </Grid>
 
         {/* Main wrapper */}
-        <Grid item sx={{ width: "85%", p: "1rem" }}>
+        <Grid item sx={{ width: "85%", p: "1rem",maxHeight:"100vh" ,overflow: "scroll" }}>
           {/* First section */}
           <Grid
             sx={{
@@ -145,7 +170,7 @@ const AdminProfile = () => {
             <Typography
               sx={{
                 fontWeight: 600,
-                fontSize: "2rem",
+                fontSize: "1.5rem",
                 color: theme.palette.borderGreen,
               }}
             >
@@ -155,13 +180,13 @@ const AdminProfile = () => {
             <Box
               onClick={handleProfileCilck}
               sx={{
-                height: "8rem",
-                width: "8rem",
+                height: "7rem",
+                width: "7rem",
                 border: "4px solid green",
                 borderRadius: "50%",
                 display: "flex",
                 alignSelf: "center",
-                my: "2rem",
+                my: "1rem",
                 overflow: "hidden",
                 p: "1rem",
                 cursor: "pointer",
@@ -183,11 +208,11 @@ const AdminProfile = () => {
                 onChange={handleFileChange}
               />
             </Box>
-            <Typography sx={{ fontWeight: 600, fontSize: "1.3rem" }}>
+            <Typography sx={{ fontWeight: 600, fontSize: "1rem" }}>
               🧑‍💼 Personal Information
             </Typography>
             <Grid
-              sx={{ width: "100%", display: "flex", gap: "10rem", my: "2rem" }}
+              sx={{ width: "100%", display: "flex", gap: "10rem", my: "1rem" }}
             >
               <ReusableField
                 label={"Username :"}
@@ -202,7 +227,9 @@ const AdminProfile = () => {
                 }}
               />
             </Grid>
-            <Grid sx={{ width: "100%", display: "flex", gap: "10rem" }}>
+            <Grid
+              sx={{ width: "100%", display: "flex", gap: "10rem", mb: "1rem" }}
+            >
               <ReusableField
                 label={"Gender :"}
                 onChange={(e) => {
@@ -235,10 +262,10 @@ const AdminProfile = () => {
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
-              py: "1rem",
+              my: "1.6rem",
             }}
           >
-            <Typography sx={{ fontWeight: 600, fontSize: "1.3rem" }}>
+            <Typography sx={{ fontWeight: 600, fontSize: "1rem" }}>
               📍 Location Information
             </Typography>
 
@@ -272,7 +299,7 @@ const AdminProfile = () => {
               py: "2rem",
             }}
           >
-            <Typography sx={{ fontWeight: 600, fontSize: "1.3rem" }}>
+            <Typography sx={{ fontWeight: 600, fontSize: "1rem" }}>
               🎓 Professional / Career Information
             </Typography>
 

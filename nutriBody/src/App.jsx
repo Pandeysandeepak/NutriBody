@@ -9,10 +9,11 @@ import {
   Route,
 } from "react-router-dom";
 
-import { ADMIN_DIETPLAN_URL, ADMIN_PROFILE, HOME_URL, SIGNIN_URL, SIGNUP_URL, USER_PROFILE } from "./components/constants";
+import { ADMIN_DIETPLAN_URL, ADMIN_PROFILE, HOME_URL, SEND_Email, SIGNIN_URL, SIGNUP_URL, USER_PROFILE } from "./components/constants";
 import AdminProfile from "./components/Admin/adminProfile";
 import AdminDietPlan from "./components/adminDietPlan";
 import UserProfilePage from "./components/User/userProfilePage";
+import SendEmail from "./components/User/sendEmail";
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
           <Route path={ADMIN_PROFILE} element={<AdminProfile />} />
           <Route path={ADMIN_DIETPLAN_URL} element={<AdminDietPlan />} />
           <Route path={USER_PROFILE} element={<UserProfilePage />} />
+          <Route path={SEND_Email} element={<SendEmail />} />
         </Routes>
       </ThemeProvider>
     </Router>

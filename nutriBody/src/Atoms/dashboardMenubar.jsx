@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Typography, Stack, useTheme } from "@mui/material";
+import { Box, Button, Typography, Stack, useTheme,Grid } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ReusableButton from "./ReusableButton";
 import {
   ADMIN_DIETPLAN_URL,
   ADMIN_PROFILE,
   HOME_URL,
+  SEND_Email,
   USER_PROFILE,
 } from "../components/constants";
 import { useNavigate } from "react-router-dom";
@@ -22,34 +23,32 @@ const DashboardMenubar = () => {
   }, []);
 
   return (
-    <Box display="flex" height="100vh" sx={{ width: "15rem" }}>
+    <Grid display="flex"  sx={{ width: "15rem", height:"100vh" }}>
       <Box
-        width="100%"
-        p={2}
+        px={"1rem"}
         sx={{
           background: "linear-gradient(to bottom, #4CAF50, #2196F3)",
           color: "white",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-between",
+          alignItems:"center"
         }}
       >
         <Box
           sx={{
-            height: "80%",
             display: "flex",
             justifyContent: "center",
             flexDirection: "column",
-            gap: "5rem",
+            gap: "2rem",
           }}
         >
-          <Typography sx={{ alignSelf: "center" }} variant="h6" gutterBottom>
-            {userType === "admin"? "Admin" : "User"}
+          <Typography sx={{ alignSelf: "center", pt:"4rem" }} variant="h6" gutterBottom>
+            {userType === "admin" ? "Admin" : "User"}
           </Typography>
 
           {userType === "admin" ? (
             <Stack
-              sx={{ alignSelf: "center", justifySelf: "center", gap: "3rem" }}
+              sx={{ alignSelf: "center", justifySelf: "center", gap: "2rem" }}
             >
               <ReusableButton
                 background={theme.palette.borderGreen}
@@ -102,6 +101,8 @@ const DashboardMenubar = () => {
                 fontSize="1.1rem"
                 buttonText="Articles"
                 fontWeight={600}
+                disabled={true}
+                tooltipText="Yet to be implemented"
                 onClick={() => {
                   setClickedButton("articles");
                 }}
@@ -120,6 +121,8 @@ const DashboardMenubar = () => {
                 fontSize="1.1rem"
                 buttonText="Add article"
                 fontWeight={600}
+                disabled={true}
+                tooltipText="Yet to be implemented"
                 onClick={() => {
                   setClickedButton("addArticles");
                 }}
@@ -138,6 +141,8 @@ const DashboardMenubar = () => {
                 fontSize="1.1rem"
                 buttonText="Diet suggestion"
                 fontWeight={600}
+                disabled={true}
+                tooltipText="Yet to be implemented"
                 onClick={() => {
                   setClickedButton("dietSuggestion");
                 }}
@@ -145,7 +150,7 @@ const DashboardMenubar = () => {
             </Stack>
           ) : (
             <Stack
-              sx={{ alignSelf: "center", justifySelf: "center", gap: "3rem" }}
+              sx={{ alignSelf: "center", justifySelf: "center", gap: "2rem" }}
             >
               <ReusableButton
                 background={theme.palette.borderGreen}
@@ -161,7 +166,7 @@ const DashboardMenubar = () => {
                 buttonText="Profile"
                 fontWeight={600}
                 onClick={() => {
-                  navigate(USER_PROFILE)
+                  navigate(USER_PROFILE);
                   setClickedButton("profile");
                 }}
               />
@@ -200,13 +205,14 @@ const DashboardMenubar = () => {
                 fontWeight={600}
                 onClick={() => {
                   setClickedButton("articles");
+                  navigate(SEND_Email);
                 }}
               />
             </Stack>
           )}
         </Box>
 
-        <Box sx={{ display: "flex", justifyContent: "center", my: "6rem" }}>
+        <Box sx={{ display: "flex", justifyContent: "center", my: "3rem" }}>
           <Button
             variant="text"
             startIcon={<LogoutIcon />}
@@ -226,7 +232,7 @@ const DashboardMenubar = () => {
       <Box flex={1} bgcolor="white" p={2}>
         {/* Content goes here */}
       </Box>
-    </Box>
+    </Grid>
   );
 };
 
