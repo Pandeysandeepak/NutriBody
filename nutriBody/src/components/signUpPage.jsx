@@ -73,7 +73,6 @@ const SignInComponent = () => {
         width: "100%",
         display: "flex",
         alignItems: "center",
-        my: "1rem",
         flexDirection: "column",
         gap: "0.8rem",
         my: "2rem",

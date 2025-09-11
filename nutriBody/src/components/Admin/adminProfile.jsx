@@ -30,7 +30,6 @@ const AdminProfile = () => {
     phone: "",
     city: "",
     state: "",
-    city: "",
     experience: "",
     qualification: "",
   });
