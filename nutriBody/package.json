@@ -36,5 +36,11 @@
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.3.0",
     "vite": "^5.4.2"
+  },
+  
+  "homepage": "https://<pandeysandeepak>.github.io/<TheBalancedBeing>",
+  "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   }
 }
