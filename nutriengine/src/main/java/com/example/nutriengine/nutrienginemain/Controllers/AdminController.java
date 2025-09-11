@@ -63,5 +63,15 @@ public class AdminController {
       return  ResponseEntity.status(HttpStatus.CREATED).body(response);
    }
 
+   @GetMapping("/get-profile-picture")
+    public ResponseEntity<?>  getProfileImage(@RequestParam String email){
+        AdminProfile adminProfile = adminProfileRepository.findByEmail(email).orElseThrow(()-> new RuntimeException("Admin not found"));
+       System.out.println("Profile url "+ adminProfile.getProfilePictureUrl());
+        if (adminProfile.getProfilePictureUrl() != null){
+            return ResponseEntity.status(HttpStatus.OK).body(Collections.singletonMap("url", adminProfile.getProfilePictureUrl()));
+        }else {
+            return ResponseEntity.ok(" ");
+        }
 
+   }
 }

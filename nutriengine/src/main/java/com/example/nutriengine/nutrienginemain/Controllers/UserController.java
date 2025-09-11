@@ -5,12 +5,17 @@ import com.example.nutriengine.nutrienginemain.Entity.Admin;
 import com.example.nutriengine.nutrienginemain.Entity.User;
 import com.example.nutriengine.nutrienginemain.Respositories.AdminRepository;
 import com.example.nutriengine.nutrienginemain.Respositories.UserRepository;
+import com.example.nutriengine.nutrienginemain.dto.EmailRequest;
 import com.example.nutriengine.nutrienginemain.dto.LoginRequest;
 import com.example.nutriengine.nutrienginemain.dto.SignupRequest;
 import com.example.nutriengine.nutrienginemain.security.JwtUtil;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +35,8 @@ public class UserController {
     private JwtUtil jwtUtil;
     @Autowired
     private AdminRepository adminRepository;
+@Autowired
+    private JavaMailSender mailSender;
 
     @PostMapping("/signUp")
     public ResponseEntity<Map<String, Object>> saveUser(@RequestBody SignupRequest request) {
@@ -99,6 +106,23 @@ public class UserController {
 
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/send-email")
+    public void sendTelegramLinkEmail(@RequestBody EmailRequest emailRequest) throws MessagingException {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+        try {
+            helper.setTo(emailRequest.getTo());
+            helper.setSubject(emailRequest.getSubject());
+            helper.setText(emailRequest.getHtmlContent() , true); // true = HTML
+            mailSender.send(message);
+            System.out.println("Email sent successfully!");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 

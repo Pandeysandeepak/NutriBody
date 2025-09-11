@@ -11,11 +11,11 @@ import lombok.*;
 @Setter
 @Table(name = "admin_profile")
 public class AdminProfile {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", insertable = false, updatable = false)
     private Long id;
     private String username;
     private String fullName;
+    @Id
     private String email;
     private String profilePictureUrl;
     private String gender;

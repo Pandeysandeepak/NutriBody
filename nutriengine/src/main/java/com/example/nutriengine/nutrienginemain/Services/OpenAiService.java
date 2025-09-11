@@ -15,7 +15,7 @@ public class OpenAiService {
 //    private final String API_KEY = "your-openai-api-key";
     private final String OPENAI_URL = GEMINI_API_BASE_URL + GEMINI_MODEL_NAME + ":generateContent?key=" + API_KEY;
 
-    public String askChatGPT(String message) {
+    public String askGemini(String message) {
         OkHttpClient client = new OkHttpClient();
 
         JSONObject requestBody = new JSONObject();

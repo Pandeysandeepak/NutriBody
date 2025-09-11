@@ -15,13 +15,14 @@ import java.util.Set;
 @Builder
 @Table(name = "admin")
 public class Admin {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
 
     @Column(unique = true, nullable = false)
     private String name;
     private String username;
+    @Id
     private String email;
 
     @Column(nullable = false)

@@ -1,6 +1,10 @@
 package com.example.nutriengine.nutrienginemain.Controllers;
 
-import com.example.nutriengine.nutrienginemain.Entity.DietPlanRequest;
+import com.example.nutriengine.nutrienginemain.Entity.*;
+import com.example.nutriengine.nutrienginemain.Respositories.AdminProfileRepository;
+import com.example.nutriengine.nutrienginemain.Respositories.AdminRepository;
+import com.example.nutriengine.nutrienginemain.Respositories.UserRepository;
+import com.example.nutriengine.nutrienginemain.Services.DietPlanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -14,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -28,9 +33,18 @@ public class DietPlanController {
     private String apiKey;
 
     private final RestTemplate restTemplate;
-    private final ObjectMapper objectMapper; // ObjectMapper for JSON parsing
+    private final ObjectMapper objectMapper;
+    @Autowired
+    DietPlanService dietPlanService;
 
     @Autowired
+    AdminRepository adminProfileRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    DietPlan dietPlan;
     public DietPlanController(RestTemplate restTemplate, ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
         this.objectMapper = objectMapper; // Initialize ObjectMapper
@@ -48,7 +62,7 @@ public class DietPlanController {
             DO NOT include any markdown code block delimiters (e.g., ```json or ```).
             The JSON object should have the following structure:
             {
-              "introNotes": "string", // General introductory notes about the plan
+              "introNotes": "string", 
               "dailyPlan": {
                 "day1": { "breakfast": "string", "lunch": "string", "snack": "string", "dinner": "string" },
                 "day2": { "breakfast": "string", "lunch": "string", "snack": "string", "dinner": "string" },
@@ -88,9 +102,6 @@ public class DietPlanController {
                 request.getConsideration(),
                 request.getMealFrequency()
         );
-
-        System.out.println("Diet preference: " + request.getDietaryPreference());
-        System.out.println("Meal Frequency: " + request.getMealFrequency());
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -141,11 +152,24 @@ public class DietPlanController {
                         if (parts != null && !parts.isEmpty() && parts.get(0).containsKey("text")) {
                             String aiGeneratedRawText = parts.get(0).get("text").toString();
 
-                            // --- IMPORTANT FIX HERE: Clean the raw AI response ---
                             String aiGeneratedJsonString = cleanAiResponseForJson(aiGeneratedRawText);
 
                             try {
                                 Map<String, Object> parsedDietPlan = objectMapper.readValue(aiGeneratedJsonString, new TypeReference<Map<String, Object>>() {});
+                                System.out.println("role: "+request.getRole());
+                                if (request.getRole().equals("admin")) {
+                                    Admin admin  = adminProfileRepository.findByEmail(request.getEmail());
+                                    dietPlan.setAdmin(admin);
+                                    System.out.println("Admin "+ admin);
+                                } else {
+                                      User user = userRepository.findByEmail(request.getEmail());
+                                      dietPlan.setUser(user);
+                                    System.out.println("User "+user);
+                                }
+
+                                String dietPlanJson = objectMapper.writeValueAsString(parsedDietPlan);
+                                dietPlan.setDietPlan(dietPlanJson);
+
                                 return ResponseEntity.ok(parsedDietPlan);
 
                             } catch (Exception jsonParseError) {
@@ -177,24 +201,11 @@ public class DietPlanController {
         }
     }
 
-    /**
-     * Cleans the AI's raw text response by removing markdown code block delimiters
-     * (e.g., ```json or ```) and trimming whitespace.
-     * @param rawText The raw string response from the AI.
-     * @return A cleaned string, ideally starting with '{' or '[' for JSON parsing.
-     */
     private String cleanAiResponseForJson(String rawText) {
         if (rawText == null || rawText.trim().isEmpty()) {
             return rawText;
         }
-
         String cleanedText = rawText.trim();
-
-        // Remove leading and trailing markdown code block fences
-        // This handles cases like:
-        // ```json\n{...}\n```
-        // ```\n{...}\n```
-        // {...} (no fences)
         if (cleanedText.startsWith("```")) {
             int firstNewline = cleanedText.indexOf('\n');
             if (firstNewline != -1) {
@@ -208,8 +219,6 @@ public class DietPlanController {
             }
         }
 
-        // Also remove any potential "json" language specifier at the start if it wasn't on its own line
-        // (though the above logic should handle `json` on its own line)
         cleanedText = cleanedText.replaceAll("^json\\s*", "");
 
         // Trim again after removing fences

@@ -46,7 +46,7 @@ public class WebSecurityConfig {
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/users/signUp", "/users/signin", "/uploads/**" ).permitAll()
+                        .requestMatchers("/users/signUp", "/users/signin", "/uploads/**","/users/send-email" ).permitAll()
                         .anyRequest().authenticated()
                 );
 
