@@ -9,11 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-<<<<<<< HEAD
     "deploy": "gh-pages -d dist"
-=======
-    "deploy": "gh-pages -d dist -r https://github.com/Pandeysandeepak/NutriBody.git"
->>>>>>> 852b87d (Reinitialize repo for GitHub Pages deployment)
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
